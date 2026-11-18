@@ -1,0 +1,72 @@
+# Long-running services outside the sandbox. Sandbox containers are created per
+# engagement by the orchestrator (python -m audit run) and attached to sandbox_net.
+#
+# Networks:
+#   sandbox_net (internal, no internet): sandbox <-> broker, policy, egress only
+#   backend:     services <-> erp, auditlog (the sandbox is never attached)
+#   egress_net:  the egress proxy's route to api.anthropic.com
+name: audit
+
+networks:
+  sandbox_net:
+    name: audit_sandbox_net
+    internal: true
+  backend:
+    name: audit_backend
+  egress_net:
+    name: audit_egress
+
+# Built once by `python -m audit up` (docker build -t audit-services:latest -f services.Dockerfile .)
+x-service: &service
+  image: audit-services:latest
+  pull_policy: never
+  restart: unless-stopped
+
+services:
+  auditlog:
+    <<: *service
+    command: ["uvicorn", "audit.auditlog.service:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
+    environment:
+      AUDIT_LOG_PATH: /var/audit/audit.jsonl
+      ERP_API_KEY: ${ERP_API_KEY}
+      CASE_TOKEN_SECRET: ${CASE_TOKEN_SECRET}
+    volumes: ["./var/audit:/var/audit"]
+    ports: ["127.0.0.1:8200:8000"]
+    networks: [backend]
+
+  erp:
+    <<: *service
+    command: ["uvicorn", "audit.erp.app:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      ERP_API_KEY: ${ERP_API_KEY}
+      SOURCE_DIR: /data/source
+    volumes: ["./var/source:/data/source:ro"]
+    networks: [backend]
+
+  broker:
+    <<: *service
+    command: ["python", "-m", "audit.broker.server"]
+    environment:
+      ERP_API_KEY: ${ERP_API_KEY}           # the real ERP key lives only in erp and broker
+      CASE_TOKEN_SECRET: ${CASE_TOKEN_SECRET}
+      ERP_URL: http://erp:8000
+      AUDITLOG_URL: http://auditlog:8000
+    ports: ["127.0.0.1:8300:8000"]
+    networks: [backend, sandbox_net]
+    depends_on: [erp, auditlog]
+
+  policy:
+    <<: *service
+    command: ["uvicorn", "audit.policy.service:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      AUDITLOG_URL: http://auditlog:8000
+    ports: ["127.0.0.1:8100:8000"]
+    networks: [backend, sandbox_net]
+    depends_on: [auditlog]
+
+  egress:
+    <<: *service
+    command: ["uvicorn", "audit.egress.proxy:app", "--host", "0.0.0.0", "--port", "8080"]
+    environment:
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}   # read from the host environment at `up`; never stored in .env
+    networks: [sandbox_net, egress_net]

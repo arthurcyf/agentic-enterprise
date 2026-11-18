@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "disableBypassPermissionsMode": "disable",
+    "deny": [
+      "WebFetch",
+      "WebSearch",
+      "Edit(//opt/runner/**)",
+      "Edit(//etc/claude-code/**)",
+      "Edit(//workspace/input/**)",
+      "Edit(//workspace/.claude/**)",
+      "Edit(//workspace/CLAUDE.md)",
+      "Read(//opt/runner/**)",
+      "Bash(curl *)",
+      "Bash(wget *)",
+      "Bash(kill *)",
+      "Bash(pkill *)",
+      "Bash(killall *)"
+    ]
+  },
+  "autoMemoryEnabled": false,
+  "disableClaudeAiConnectors": true
+}

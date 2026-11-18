@@ -1,0 +1,53 @@
+# Written policy for agent tool calls inside the sandbox.
+# The policy service evaluates every tool call the runner forwards (from the
+# PreToolUse hook and from can_use_tool). Anything not allowed here is denied.
+
+workspace: /workspace
+writable_dirs:            # Write/Edit and shell redirection may only target these
+  - /workspace/scratch
+  - /workspace/outbox
+readable_dirs:            # Read/Glob/Grep may only look here
+  - /workspace
+
+protected_paths:          # never written, and never mentioned in a shell command
+  - /opt/runner
+  - /etc/claude-code
+  - /workspace/input
+  - /workspace/.claude
+  - /workspace/CLAUDE.md
+  - /proc
+  - /home/agent/.claude-config
+
+denied_tools:             # hard denials (also in disallowed_tools; listed here so the log says why)
+  - WebFetch
+  - WebSearch
+  - NotebookEdit
+
+always_allowed_tools:     # harmless harness tools
+  - ToolSearch
+  - TodoWrite
+
+agent_denied_tools:       # per-agent restrictions (in addition to each AgentDefinition's tool list)
+  lead: [Write, Edit, Bash]          # the Lead coordinates; only the tester writes code and runs it
+  planner: [Write, Edit, Bash]
+  reviewer: [Write, Edit, Bash]      # the reviewer can only read and flag issues
+  reporter: [Edit, Bash]
+  unknown: [Write, Edit, Bash]       # a subagent we cannot identify gets nothing that changes state
+
+bash:
+  allowed_commands: [python, python3, ls, cat, head, tail, wc, sort, uniq, grep, cut, mkdir, sha256sum, echo, pwd, cd, test, true]
+  denied_commands: [curl, wget, nc, ncat, netcat, ssh, scp, telnet, ftp, kill, pkill, killall, sudo, su, chmod, chown, mount, rm, dd, apt, pip, npm]
+  allowed_operators: ["|", "&&"]      # each segment is checked separately
+  denied_substrings: ["$(", "`", "<(", ">(", "/dev/tcp", "/dev/udp"]
+
+subagents:                # Agent tool: only these subagent types may be started
+  - planner
+  - tester
+  - reporter
+  - reviewer
+
+mcp:
+  # tool name prefix -> agent types allowed to call it ("lead" is the main agent)
+  mcp__outbox__propose_action: [lead]
+  mcp__broker__: [tester]
+  mcp__workspace__save_extract: [tester]

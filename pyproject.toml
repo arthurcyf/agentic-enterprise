@@ -1,0 +1,34 @@
+[project]
+name = "audit"
+version = "0.1.0"
+description = "Prototype: agentic internal audit on the Claude Agent SDK, with a deterministic verification gate"
+requires-python = ">=3.11"
+dependencies = [
+  "claude-agent-sdk==0.2.184",
+  "fastapi>=0.110",
+  "uvicorn>=0.29",
+  "httpx>=0.27",
+  "pydantic>=2.6",
+  "pyyaml>=6",
+]
+
+[project.optional-dependencies]
+host = ["docker>=7"]
+dev = ["pytest>=8", "docker>=7"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["audit*"]
+
+[tool.setuptools.package-data]
+audit = ["policy/policy.yaml", "templates/**/*", "templates/.claude/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+  "live: calls the Anthropic API (set RUN_LIVE=1)",
+  "docker: needs Docker and the compose stack (set RUN_DOCKER=1)",
+]

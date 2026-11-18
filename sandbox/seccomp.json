@@ -1,0 +1,18 @@
+{
+  "comment": "Prototype profile: allow by default, deny process-inspection and namespace/kernel syscalls. With cap_drop ALL most privileged calls already fail; the key additions are ptrace and process_vm_* so the agent's code cannot read or patch the runner's memory. Production would start from Docker's default allowlist profile and add these denials.",
+  "defaultAction": "SCMP_ACT_ALLOW",
+  "syscalls": [
+    {
+      "names": [
+        "ptrace", "process_vm_readv", "process_vm_writev", "kcmp", "pidfd_getfd",
+        "unshare", "setns", "mount", "umount2", "pivot_root", "chroot",
+        "bpf", "perf_event_open", "userfaultfd", "keyctl", "add_key", "request_key",
+        "kexec_load", "kexec_file_load", "init_module", "finit_module", "delete_module",
+        "reboot", "swapon", "swapoff", "acct", "settimeofday", "clock_settime",
+        "open_by_handle_at", "name_to_handle_at", "iopl", "ioperm", "quotactl", "syslog"
+      ],
+      "action": "SCMP_ACT_ERRNO",
+      "errnoRet": 1
+    }
+  ]
+}

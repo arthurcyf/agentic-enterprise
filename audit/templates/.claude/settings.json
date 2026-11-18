@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "defaultMode": "default",
+    "allow": [],
+    "deny": [
+      "WebFetch",
+      "WebSearch",
+      "Edit(//opt/runner/**)",
+      "Edit(//etc/claude-code/**)",
+      "Edit(//workspace/input/**)",
+      "Read(//opt/runner/**)",
+      "Bash(curl *)",
+      "Bash(wget *)",
+      "Bash(kill *)",
+      "Bash(pkill *)"
+    ]
+  },
+  "autoMemoryEnabled": false,
+  "disableClaudeAiConnectors": true
+}
