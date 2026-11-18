@@ -1,4 +1,9 @@
 """Transactional outbox, relay, executor, idempotency ledger. Deterministic, no LLM."""
+
+# How this file fits in
+# ---------------------
+# Covers:   outbox.db (atomic approval + outbox), outbox.relay (re-run, crash), executor.worker
+#           (idempotency ledger, hash check, retry/backoff, escalation), executor.handlers credentials.
 import json
 
 import pytest

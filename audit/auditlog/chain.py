@@ -4,6 +4,13 @@ Each entry stores the previous entry's hash, and its own hash covers its
 content plus that link. Editing, deleting or reordering any line breaks the
 chain from that point, and `verify` reports the first bad sequence number.
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  auditlog.service (the single writer in the compose stack)
+#           common.auditlog_client.LocalAuditLog (direct file writes when no service is running)
+#           cli.cmd_verify_log and tests (verify)
+# Data:     var/audit/audit.jsonl, bind-mounted into the auditlog container at /var/audit.
 from __future__ import annotations
 
 import json

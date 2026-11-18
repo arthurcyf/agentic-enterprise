@@ -1,3 +1,8 @@
+# How this file fits in
+# ---------------------
+# Covers:   data.generate (determinism, planted exceptions) checked against gate.reperform, and
+#           common.token (mint/verify, tampering, expiry). Uses the `dataset` fixture from conftest.
+
 import hashlib
 import time
 

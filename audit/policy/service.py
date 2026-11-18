@@ -4,6 +4,13 @@ The runner's PreToolUse hook and can_use_tool callback are thin clients of
 POST /decide. The policy file lives here, not in the sandbox, so the agent
 cannot edit it.
 """
+
+# How this file fits in
+# ---------------------
+# Runs as:  compose service `policy` (on sandbox_net so the runner can reach it; port 127.0.0.1:8100).
+# Called by: runner.hooks.PolicyClient for every tool call (stage "hook" and stage "can_use_tool"), and
+#           by runner.probes in the demo.
+# Calls:    policy.engine.PolicyEngine.decide, then the audit-log client (every decision is logged).
 from __future__ import annotations
 
 from fastapi import FastAPI

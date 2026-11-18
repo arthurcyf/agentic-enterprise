@@ -3,6 +3,15 @@
 Every subagent runs in the foreground (background=False) so the Lead waits
 for its report, and has its own tool list, disallowed tools and model.
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  runner.main.build_options (agents=build_agents(), Lead prompt appended to the system prompt).
+# Refers to: tool names defined in runner.outbox_tool, runner.workspace_tool and broker.server;
+#           the methodology in templates/CLAUDE.md; file paths under /workspace/scratch that the Lead
+#           later passes to propose_action as payload_file / evidence_refs_file.
+# Models:   from common.config.MODELS (set in the container env by the orchestrator).
+# Restrictions here are mirrored, independently, in policy.yaml (agent_denied_tools, mcp rules).
 from __future__ import annotations
 
 from audit.common import config

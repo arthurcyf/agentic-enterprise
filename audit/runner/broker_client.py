@@ -1,4 +1,10 @@
 """Minimal MCP client for the remote broker (used by save_extract and the scripted agent)."""
+
+# How this file fits in
+# ---------------------
+# Used by:  runner.workspace_tool (save_extract), runner.main scripted mode (scripted agent's data),
+#           tests/unit/test_broker.py (MCP over real HTTP).
+# Calls:    broker.server over streamable-HTTP MCP, sending the case token as X-Case-Token.
 from __future__ import annotations
 
 import json

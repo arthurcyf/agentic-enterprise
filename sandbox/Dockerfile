@@ -1,4 +1,13 @@
 # Sandbox image: one container per engagement, created fresh and destroyed afterwards.
+#
+# How this file fits in
+# ---------------------
+# Built by:  `python -m audit up` (audit/cli.py) as audit-sandbox:latest.
+# Run by:    audit/orchestrator/engagement.py (run_container), with sandbox/seccomp.json, a read-only
+#            rootfs, no capabilities, uid 10001, and only the audit_sandbox_net network.
+# Contains:  the runner (audit/runner, entry audit.runner.main) and the Agent SDK with its bundled
+#            Claude Code CLI. managed-settings.json is baked in read-only at /etc/claude-code.
+# Talks to:  policy (hooks), broker (MCP, case token), egress (model API). Nothing else.
 FROM python:3.11-slim
 
 # The Agent SDK wheel bundles the Claude Code CLI (verified: SDK 0.2.184 bundles CLI 2.1.327).

@@ -10,6 +10,12 @@ policy service and enforce its answer. They contain no policy themselves.
   * can_use_tool runs only for calls that still need a permission decision.
     It asks again (stage="can_use_tool") as a second layer.
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  runner.main.build_options (PreToolUse hook, SubagentStart hook, can_use_tool callback)
+#           and runner.main scripted mode (runner.probes sends forbidden calls through the same hook).
+# Calls:    policy.service POST /decide. Holds no policy itself.
 from __future__ import annotations
 
 import os

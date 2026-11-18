@@ -3,6 +3,12 @@
 The mock targets check the credential, so a handler cannot act on a system it
 was not given access to. None of these credentials is the broker's ERP key.
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  executor.worker (one handler per action type), cli.cmd_data (provision_credentials).
+# Data:     var/creds/<target>.token (each handler's own credential, separate from the broker's ERP key)
+#           var/mock_targets/{repo,tracker,slack}/ (the mock systems, each checking its credential).
 from __future__ import annotations
 
 import hmac

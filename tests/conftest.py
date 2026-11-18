@@ -3,6 +3,11 @@
 AUDIT_VAR must be set before any audit module is imported, because
 audit.common.config computes its paths at import time.
 """
+
+# How this file fits in
+# ---------------------
+# Imported by pytest before every test module. Points AUDIT_VAR at a temp folder before any audit
+# module (and so common.config) is imported, and provides the shared `dataset` fixture.
 import os
 import tempfile
 

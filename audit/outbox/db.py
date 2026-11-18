@@ -4,6 +4,13 @@ An approval and the action it authorises are written in ONE transaction:
 either both rows exist or neither does. The relay later publishes unpublished
 outbox rows to the executor queue (at-least-once; the executor deduplicates).
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  gate.gate (record, approve_and_enqueue, escalate), review.cli (human approval uses the same
+#           approve_and_enqueue), outbox.relay (reads unpublished outbox rows), executor.worker
+#           (checks the approved hash, escalates failures).
+# Data:     var/state.db: proposals, gate_results, approvals, outbox, review_queue.
 from __future__ import annotations
 
 import json

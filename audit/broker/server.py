@@ -3,6 +3,14 @@
 The case token arrives as the X-Case-Token request header, which the runner
 sets in its MCP server config.
 """
+
+# How this file fits in
+# ---------------------
+# Runs as:  compose service `broker` (on backend AND sandbox_net, so the sandbox can reach it).
+# Called by: the Claude Code CLI in the sandbox, as MCP tools mcp__broker__list_tables / extract
+#           (configured in runner.main.build_options with the X-Case-Token header), and
+#           runner.broker_client (used by save_extract and the scripted agent).
+# Calls:    broker.core.Broker for every request.
 from __future__ import annotations
 
 import json

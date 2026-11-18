@@ -9,6 +9,11 @@ make small Haiku calls to prove behaviour the docs describe:
   (e) hidden built-in subagents are unavailable with the env flag and the fork deny rule
   (f) max_budget_usd ends the run with error_max_budget_usd
 """
+
+# How this file fits in
+# ---------------------
+# Covers:   the installed claude_agent_sdk (types the runner relies on) and runner.main.build_options;
+#           live tests (RUN_LIVE=1) check hook / can_use_tool / subagent behaviour against the real API.
 import asyncio
 import dataclasses
 import os

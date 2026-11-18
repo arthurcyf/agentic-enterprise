@@ -1,4 +1,9 @@
 """Gate tests driven by the scripted agent (deterministic, no LLM)."""
+
+# How this file fits in
+# ---------------------
+# Covers:   gate.gate checks, driven by runner.scripted via orchestrator.local (clean, corrupted,
+#           injected) plus hand-mutated proposals; also runner.outbox_tool input validation.
 import asyncio
 import json
 

@@ -5,6 +5,15 @@ case token; the broker verifies it and refuses anything outside its scope,
 so the agent cannot use the broker's authority for another entity, quarter
 or table (no confused deputy).
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  broker.server (the real service) and orchestrator.local (tests, in-process).
+# Calls:    common.token.verify (case token), erp.app via http_erp_fetch (with the ERP key),
+#           common.canon.project_row/row_hash (strip non-allowlisted fields, stamp evidence hashes),
+#           the audit-log client (one entry per call, never the ERP key).
+# Returns rows that the tester saves (runner.workspace_tool) and later cites as evidence; the gate
+# checks those citations against the same hashes.
 from __future__ import annotations
 
 import os

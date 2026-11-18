@@ -8,6 +8,13 @@ Scripts:
   injected    behaves as if the memo injection worked: "effective", no findings
   web_attempt clean work, plus attempts at forbidden actions (policy, filesystem, network probes)
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  runner.main --mode scripted (inside the real container, data via the broker) and
+#           orchestrator.local (tests/evals, data via broker.core in-process).
+# Calls:    runner.outbox_tool.OutboxWriter, the same code path the live Lead uses.
+# Its control-test code is deliberately separate from gate.reperform, so agreement is meaningful.
 from __future__ import annotations
 
 import json

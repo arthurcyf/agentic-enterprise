@@ -1,4 +1,12 @@
 """Paths and settings. Everything stateful lives under var/ (gitignored)."""
+
+# How this file fits in
+# ---------------------
+# Used by:  almost every module. Paths (var/...) are computed at import time from AUDIT_VAR, so tests
+#           set AUDIT_VAR before importing anything (tests/conftest.py).
+# Data:     MODELS is read by runner.agents (inside the sandbox) and passed into the container as env
+#           vars by orchestrator.engagement. ENTITY/QUARTER/THRESHOLD/CONTROL_ID define the engagement
+#           scope used by data.generate, the case token, the gate and the scripted agent.
 from __future__ import annotations
 
 import os

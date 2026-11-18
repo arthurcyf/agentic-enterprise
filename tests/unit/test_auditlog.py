@@ -1,3 +1,7 @@
+# How this file fits in
+# ---------------------
+# Covers:   auditlog.chain: append/verify, tamper detection (edit, delete, reorder), redaction.
+
 import json
 
 from audit.auditlog.chain import HashChainLog, redact, verify

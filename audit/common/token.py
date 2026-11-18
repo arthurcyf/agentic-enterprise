@@ -4,6 +4,13 @@ The orchestrator mints a token scoped to one engagement (one entity, one
 quarter, AP tables only). The sandbox only ever sees the token; the broker
 verifies it and enforces the scope on every request.
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  orchestrator.engagement (and orchestrator.local) call mint() to create a short-lived token
+#           scoped to one engagement; it is passed into the sandbox as CASE_TOKEN.
+#           broker.core calls verify() on every request (token arrives as the X-Case-Token header).
+# Secret:   CASE_TOKEN_SECRET lives only in .env (host) and the broker container, never in the sandbox.
 from __future__ import annotations
 
 import base64

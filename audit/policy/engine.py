@@ -3,6 +3,12 @@
 No I/O, so it is fully unit-testable. The policy service wraps it in HTTP and
 writes every decision to the audit log.
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  policy.service (one PolicyEngine per process) and tests/unit/test_policy.py.
+# Reads:    policy.yaml in this folder. Pure function: no I/O besides loading the file.
+# The callers inside the sandbox are runner.hooks (PreToolUse hook and can_use_tool), via the service.
 from __future__ import annotations
 
 import posixpath

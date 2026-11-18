@@ -6,6 +6,13 @@ runner holds) and writes the rows to /workspace/scratch/extracts/<table>.json,
 so the Tester can analyse them with Python. The broker is still the only path
 to ERP data and still enforces the token's scope.
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  runner.main (in-process MCP server `workspace`, tool mcp__workspace__save_extract, tester only
+#           per policy.yaml).
+# Calls:    runner.broker_client.BrokerClient.fetch_all -> broker.server -> broker.core -> erp.app.
+# Writes:   /workspace/scratch/extracts/<table>.json, which the tester's Python analysis reads.
 from __future__ import annotations
 
 import json

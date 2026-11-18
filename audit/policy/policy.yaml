@@ -1,6 +1,15 @@
 # Written policy for agent tool calls inside the sandbox.
 # The policy service evaluates every tool call the runner forwards (from the
 # PreToolUse hook and from can_use_tool). Anything not allowed here is denied.
+#
+# How this file fits in
+# ---------------------
+# Read by:   audit/policy/engine.py (loaded once by audit/policy/service.py, in the `policy` container).
+# Applies to: calls forwarded by audit/runner/hooks.py from inside the sandbox. The file is not in the
+#            sandbox, so the agent cannot edit it.
+# Must match: agent names in audit/runner/agents.py, MCP tool names in audit/runner/outbox_tool.py,
+#            workspace_tool.py and audit/broker/server.py, and the sandbox paths set up by
+#            audit/orchestrator/engagement.py. tests/unit/test_policy.py has one case per rule.
 
 workspace: /workspace
 writable_dirs:            # Write/Edit and shell redirection may only target these

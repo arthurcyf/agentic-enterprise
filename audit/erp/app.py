@@ -3,6 +3,13 @@
 It returns full rows (including fields such as user e-mail that are not
 allowlisted); the broker strips them before anything reaches the agent.
 """
+
+# How this file fits in
+# ---------------------
+# Runs as:  compose service `erp` (backend network only: the sandbox cannot reach it).
+# Called by: broker.core.http_erp_fetch, with the X-ERP-Key header. ERP_API_KEY is in the erp and
+#           broker containers only.
+# Data:     var/source/*.csv (written by data.generate), mounted read-only at /data/source.
 from __future__ import annotations
 
 import hmac

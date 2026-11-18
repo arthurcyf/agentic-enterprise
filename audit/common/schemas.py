@@ -1,4 +1,10 @@
 """Proposal and workpaper schemas. The outbox tool and the gate both use them."""
+
+# How this file fits in
+# ---------------------
+# Used by:  runner.outbox_tool validates a proposal when the agent calls propose_action (fast feedback
+#           to the agent), and gate.gate validates it AGAIN outside the sandbox (the gate never trusts the
+#           sandbox's check). The shapes also appear, in prose, in templates/CLAUDE.md for the agents.
 from __future__ import annotations
 
 from typing import Literal

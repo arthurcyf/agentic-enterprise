@@ -4,6 +4,11 @@ This is deliberately separate code from anything the agents or the scripted
 agent use. The gate trusts only this result and the source CSVs, never the
 agent's narrative.
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  gate.gate.evaluate (and a data test). Reads var/source/*.csv via data.generate.load_table.
+# Independent of runner.scripted and of anything the agents write.
 from __future__ import annotations
 
 from collections import defaultdict

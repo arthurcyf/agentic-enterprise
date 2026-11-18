@@ -3,6 +3,17 @@
   stage input (brief, CLAUDE.md, settings) -> mint case token -> run container
   -> collect outbox + stream -> destroy container -> gate -> (retry once | approve | escalate)
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  cli.cmd_run, demo.py, evals.run.
+# Calls:    common.token.mint (case token), docker (creates the container from sandbox/Dockerfile's
+#           image with sandbox/seccomp.json, attaches it to audit_sandbox_net, removes it afterwards),
+#           gate.gate.evaluate/apply, the audit-log client.
+# Data:     var/engagements/<id>/attempt-<n>/ {input (from audit/templates), scratch, outbox, out}
+#           bind-mounted into the container. On a retry it writes input/gate_feedback.md from
+#           gate.feedback_for_retry, which runner.main adds to the agent's prompt.
+# `runner=` lets tests swap run_container for orchestrator.local.local_scripted_runner.
 from __future__ import annotations
 
 import json

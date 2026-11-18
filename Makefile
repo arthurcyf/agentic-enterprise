@@ -1,4 +1,5 @@
 # Thin wrapper for Linux/macOS/WSL. On Windows, run `python -m audit <command>` directly.
+# Every target calls audit/cli.py (via python -m audit) or pytest; no logic lives here.
 PY ?= python
 
 .PHONY: install data up down demo demo-offline test test-live eval verify-log

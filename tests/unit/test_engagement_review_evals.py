@@ -1,5 +1,10 @@
 """Full engagement path without Docker or an LLM: scripted agent -> broker logic -> outbox -> gate
 -> transactional outbox -> review queue -> relay -> executor; plus eval metrics."""
+
+# How this file fits in
+# ---------------------
+# Covers:   the whole host path without Docker: orchestrator.engagement (with orchestrator.local) ->
+#           gate -> outbox.db -> review.cli -> outbox.relay -> executor.worker -> audit log; evals.
 import json
 
 import pytest

@@ -1,4 +1,8 @@
 """Eval metrics against the hidden answer key."""
+
+# How this file fits in
+# ---------------------
+# Used by:  evals.run and demo (recall_precision). Pure functions, no I/O.
 from __future__ import annotations
 
 from math import comb

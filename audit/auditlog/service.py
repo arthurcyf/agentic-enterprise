@@ -4,6 +4,13 @@ Components outside the sandbox (policy, broker, gate, executor, review CLI)
 POST entries here. The sandbox cannot reach this service; the runner's stream
 is ingested by the orchestrator after the run.
 """
+
+# How this file fits in
+# ---------------------
+# Runs as:  compose service `auditlog` (backend network only; port 127.0.0.1:8200 for host tools).
+# Called by: common.auditlog_client.HttpAuditLog from policy, broker, gate, relay, executor, review,
+#           orchestrator. The sandbox is not on the backend network, so it cannot write or read here.
+# Calls:    auditlog.chain.HashChainLog (redacts secrets before writing).
 from __future__ import annotations
 
 import os

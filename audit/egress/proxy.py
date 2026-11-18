@@ -5,6 +5,13 @@ API key. This proxy forwards allowlisted Anthropic API paths to
 https://api.anthropic.com, replacing the dummy key with the real one, which
 lives only in this container. Every other path is refused and logged.
 """
+
+# How this file fits in
+# ---------------------
+# Runs as:  compose service `egress` (on sandbox_net and egress_net, the only one with internet).
+# Called by: the Claude Code CLI inside the sandbox, because orchestrator.engagement sets
+#           ANTHROPIC_BASE_URL=http://egress:8080 and ANTHROPIC_API_KEY=sk-dummy in the container.
+# Secret:   the real ANTHROPIC_API_KEY comes from the host shell via docker-compose.yml, only here.
 from __future__ import annotations
 
 import logging

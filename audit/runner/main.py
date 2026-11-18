@@ -8,6 +8,18 @@ which is why the runner lives in the sandbox. Everything it may do is
 decided outside: the policy service decides tool calls, and the gate decides
 what leaves through the outbox.
 """
+
+# How this file fits in
+# ---------------------
+# Runs as:  the sandbox container's command, started by orchestrator.engagement.run_container.
+# Calls:    runner.agents (subagent definitions), runner.hooks (policy clients), runner.outbox_tool
+#           (propose_action), runner.workspace_tool (save_extract), runner.broker_client, and in
+#           scripted mode runner.scripted + runner.probes.
+# Network:  policy service (hooks), broker (MCP), egress (model API). Nothing else is reachable.
+# Writes:   /workspace/outbox/*.json  -> collected by the orchestrator, read by gate.gate
+#           /workspace/out/stream.jsonl -> copied into the audit log by orchestrator.ingest_stream
+#           /workspace/out/result.json  -> run summary used by the gate's budget check and the CLI
+# Reads:    /workspace/input/gate_feedback.md (written by the orchestrator for a retry attempt).
 from __future__ import annotations
 
 import argparse

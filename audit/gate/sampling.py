@@ -6,6 +6,11 @@
 The gate redraws with the agent's stated seed and size and requires an
 identical, identically ordered list.
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  gate.gate.check_sample. The same method and sample-size table are written in
+#           templates/CLAUDE.md for the agents, and runner.scripted uses the same documented call.
 from __future__ import annotations
 
 import random

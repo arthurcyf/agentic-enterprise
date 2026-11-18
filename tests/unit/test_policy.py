@@ -1,3 +1,7 @@
+# How this file fits in
+# ---------------------
+# Covers:   policy.engine against policy.yaml: one row per rule, with the agent type that triggers it.
+
 import pytest
 
 from audit.policy.engine import PolicyEngine

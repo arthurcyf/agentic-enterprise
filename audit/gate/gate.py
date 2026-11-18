@@ -6,6 +6,15 @@ authoritative source data. Output per engagement attempt:
   retry     -> first attempt failed; the orchestrator re-runs the agent once with the reasons
   escalated -> second failure, or a high-risk conclusion; a human decides in the review CLI
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  orchestrator.engagement.run_engagement (evaluate, apply, feedback_for_retry), tests.
+# Reads:    proposals from var/engagements/<id>/attempt-<n>/outbox (written by runner.outbox_tool),
+#           the run summary (runner.main result.json + orchestrator wall clock), var/source/*.csv.
+# Calls:    common.schemas, common.canon, gate.reperform, gate.sampling.
+# Writes:   via outbox.db: approvals + outbox rows (approved) or review_queue rows (escalated),
+#           read later by outbox.relay and review.cli; gate results to the audit log.
 from __future__ import annotations
 
 import json

@@ -4,6 +4,15 @@ If AUDITLOG_URL is set, entries go to the audit log service (the normal case
 when the compose stack is running). Otherwise this process writes the local
 file itself, which is fine for tests and single-process tools.
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  policy.service, broker.server, gate.gate, outbox.relay, executor.worker, review.cli,
+#           orchestrator.engagement: anything outside the sandbox that must leave an audit trail.
+# Calls:    HttpAuditLog -> POST auditlog.service /append (normal case, compose stack running)
+#           LocalAuditLog -> auditlog.chain.HashChainLog on var/audit/audit.jsonl (tests, no services)
+# The sandbox never uses this: it cannot reach the auditlog service. Its transcript is copied in by
+# orchestrator.engagement.ingest_stream after the run.
 from __future__ import annotations
 
 import os

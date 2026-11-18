@@ -1,6 +1,18 @@
 # Long-running services outside the sandbox. Sandbox containers are created per
 # engagement by the orchestrator (python -m audit run) and attached to sandbox_net.
 #
+# How this file fits in
+# ---------------------
+# Started by:  `python -m audit up` (audit/cli.py), after it builds audit-services:latest from
+#              services.Dockerfile and creates .env (ERP_API_KEY, CASE_TOKEN_SECRET).
+# Who talks to whom:
+#   sandbox (audit/runner)    -> policy, broker, egress        (sandbox_net only)
+#   broker (audit/broker)     -> erp, auditlog                  (backend)
+#   policy (audit/policy)     -> auditlog                       (backend)
+#   egress (audit/egress)     -> api.anthropic.com              (egress_net)
+#   host tools (cli, gate, executor, review) -> auditlog :8200, policy :8100, broker :8300 (127.0.0.1)
+# Shared folders: ./var/source (data.generate -> erp, read-only), ./var/audit (auditlog writes the chain).
+#
 # Networks:
 #   sandbox_net (internal, no internet): sandbox <-> broker, policy, egress only
 #   backend:     services <-> erp, auditlog (the sandbox is never attached)

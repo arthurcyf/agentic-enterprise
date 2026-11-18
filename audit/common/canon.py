@@ -3,6 +3,16 @@
 The broker, the gate and the executor all hash the same canonical form, so a
 row hash or proposal hash computed in one place can be checked in another.
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  broker.core      stamps every row it returns with _row_id and _row_hash (row_hash)
+#           runner.outbox_tool stamps every proposal with proposal_hash
+#           gate.gate        recomputes both hashes from the source CSVs / proposal content and compares
+#           outbox.db        derives the executor's idempotency key (idempotency_key)
+#           review.cli       shows whether cited evidence still matches the source
+#           data.generate    uses ALLOWLIST as the CSV column order
+# The point: hashes are computed identically on both sides, so the gate can detect altered evidence.
 from __future__ import annotations
 
 import hashlib

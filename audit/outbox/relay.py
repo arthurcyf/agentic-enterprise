@@ -4,6 +4,12 @@ At-least-once: if the relay crashes after publishing but before marking the
 row, the next run publishes it again. The queue ignores duplicate action ids,
 and the executor's ledger makes execution idempotent anyway.
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  cli.cmd_relay, demo, tests. review.cli also uses connect_queue to re-queue an item.
+# Reads:    var/state.db outbox rows (published = 0), written by outbox.db.approve_and_enqueue.
+# Writes:   var/queue.db, consumed by executor.worker.
 from __future__ import annotations
 
 import sqlite3

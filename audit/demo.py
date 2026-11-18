@@ -8,6 +8,13 @@
   6. Re-running the executor does not file anything twice.
   7. The audit log verifies end to end.
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  cli.cmd_demo (`python -m audit demo [--offline]`).
+# Calls:    the same cli.cmd_* functions a user would run (run, review, relay, execute, verify-log),
+#           plus evals.run.proposed_findings / evals.metrics.recall_precision to score step 1 against
+#           var/answer_key.json. Reads var/audit/audit.jsonl to print recent policy denials.
 from __future__ import annotations
 
 import argparse

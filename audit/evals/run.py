@@ -5,6 +5,12 @@ outcome, escalation correctness, cost and turns. Overall: mean recall/precision,
 pass^k (a run "passes" when the gate approved it and its findings match the key
 exactly), plus a scripted control run that must be escalated.
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  cli.cmd_eval, tests (scripted mode with orchestrator.local).
+# Calls:    orchestrator.engagement.run_engagement (N live runs + one scripted 'corrupted' control run),
+#           evals.metrics. Reads var/answer_key.json (from data.generate). Writes var/evals/eval-*.json.
 from __future__ import annotations
 
 import json

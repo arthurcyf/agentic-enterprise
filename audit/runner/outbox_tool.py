@@ -4,6 +4,14 @@
 /workspace/outbox. Nothing is executed here. After the run, the gate reads
 these files from outside the sandbox and decides.
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  runner.main (in-process MCP server `outbox`, tool mcp__outbox__propose_action, for the Lead)
+#           runner.scripted and orchestrator.local (OutboxWriter directly, no LLM).
+# Calls:    common.schemas (validate), common.canon.proposal_hash (stamp).
+# Writes:   /workspace/outbox/NNN-<type>-<target>.json, collected by orchestrator.engagement and read
+#           by gate.gate.load_proposals. Only payload files under /workspace/scratch may be referenced.
 from __future__ import annotations
 
 import json

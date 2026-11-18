@@ -5,6 +5,13 @@ For each queued action:
   2. Check the idempotency ledger (unique key per engagement, action type and target): done -> skip.
   3. Run the handler; retry temporary failures with exponential backoff; escalate after 3 failures.
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  cli.cmd_execute, demo, tests.
+# Reads:    var/queue.db (from outbox.relay), var/state.db approvals/outbox (the approved hash).
+# Writes:   var/executor.db ledger (UNIQUE idempotency key), the mock targets via executor.handlers,
+#           review_queue rows (via outbox.db.escalate) after 3 failures or a hash mismatch, audit log.
 from __future__ import annotations
 
 import json

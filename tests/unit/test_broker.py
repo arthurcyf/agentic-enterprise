@@ -1,3 +1,8 @@
+# How this file fits in
+# ---------------------
+# Covers:   broker.core scope enforcement and logging, and broker.server + runner.broker_client
+#           talking real MCP over HTTP (uvicorn in a thread). ERP data comes from orchestrator.local.
+
 import asyncio
 import json
 import socket

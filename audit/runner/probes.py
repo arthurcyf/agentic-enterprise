@@ -5,6 +5,12 @@ function the SDK calls, so they are decided by the policy service and logged.
 Layer 2, container: try the same things directly at the OS level, to show
 the boundary holds even if the policy layer were bypassed.
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  runner.main scripted mode with --script web_attempt (demo step 5).
+# Calls:    the PreToolUse hook from runner.hooks (-> policy.service), then direct OS-level attempts.
+# Results go into /workspace/out/result.json ("probes"), which demo.py prints.
 from __future__ import annotations
 
 import os

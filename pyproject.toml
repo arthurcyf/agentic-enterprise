@@ -1,3 +1,6 @@
+# How this file fits in: installs the `audit` package on the host (pip install -e ".[dev]") so that
+# `python -m audit` and pytest work. The container images do not use it; services.Dockerfile and
+# sandbox/Dockerfile install their own dependencies and copy the audit/ folder directly.
 [project]
 name = "audit"
 version = "0.1.0"

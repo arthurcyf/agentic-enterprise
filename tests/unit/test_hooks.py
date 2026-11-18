@@ -1,4 +1,9 @@
 """The runner's thin policy clients: enforce the service's answer, fail closed."""
+
+# How this file fits in
+# ---------------------
+# Covers:   runner.hooks against a real policy.service (uvicorn in a thread): deny/allow handling,
+#           fail-closed behaviour, the agent registry, and decisions reaching the audit log.
 import asyncio
 import socket
 import threading

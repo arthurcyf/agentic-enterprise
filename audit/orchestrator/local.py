@@ -4,6 +4,13 @@ It runs the scripted agent against the real broker logic (token check, scope,
 allowlist, row hashes) reading the local source CSVs, and writes proposals to
 the same attempt folders the container would use.
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  tests (tests/unit/test_gate.py, test_engagement_review_evals.py) and evals.run in scripted mode.
+# Replaces: orchestrator.engagement.run_container, with the same signature and attempt folders.
+# Calls:    broker.core.Broker (real scope checks and hashing, local CSVs), runner.scripted,
+#           runner.outbox_tool.OutboxWriter.
 from __future__ import annotations
 
 import asyncio

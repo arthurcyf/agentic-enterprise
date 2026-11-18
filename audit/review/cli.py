@@ -8,6 +8,14 @@
 Approving a gate escalation uses the same transactional outbox as the gate
 (approval row + outbox row in one transaction), with approver "human:<name>".
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  cli.cmd_review (`python -m audit review list|show|approve|reject`), demo, tests.
+# Reads:    var/state.db review_queue + proposals (written by gate.gate / executor.worker),
+#           var/source/*.csv (to show cited evidence next to the source row).
+# Writes:   approval -> outbox.db.approve_and_enqueue (same transactional path as the gate);
+#           executor escalations -> re-queue in queue.db and clear the failed ledger row; audit log.
 from __future__ import annotations
 
 import json

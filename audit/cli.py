@@ -1,4 +1,4 @@
-﻿"""python -m audit <command>
+"""python -m audit <command>
 
   data         generate the synthetic quarter (seeded) and the hidden answer key
   up / down    build images and start/stop the services (docker compose)
@@ -10,6 +10,17 @@
   eval         run N live engagements and report recall/precision/pass^k/cost/turns
   demo         the end-to-end demo (add --offline to skip the live agent run)
 """
+
+# How this file fits in
+# ---------------------
+# Used by:  audit/__main__.py (`python -m audit <cmd>`), the Makefile, and audit/demo.py (which calls cmd_* directly).
+# Calls:    data.generate + executor.handlers.provision_credentials (data)
+#           docker build / docker compose (up, down) to start auditlog, erp, broker, policy, egress
+#           orchestrator.engagement.run_engagement (run) -> sandbox container -> gate
+#           outbox.relay.publish (relay), executor.worker.Executor (execute), review.cli (review)
+#           auditlog.chain.verify (verify-log), evals.run.run_evals (eval), demo.run_demo (demo)
+# Data:     reads .env (ERP_API_KEY, CASE_TOKEN_SECRET) into os.environ so the orchestrator can mint
+#           case tokens; points the audit-log client at the auditlog service (127.0.0.1:8200) when it is up.
 from __future__ import annotations
 
 import argparse
